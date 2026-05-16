@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hub Engine Video Studio & YouTube Integration</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#0c0f1a;--bg2:#131726;--bg3:#1a1f30;--bg4:#1e2438;
+  --teal:#00d4aa;--purple:#a78bfa;--blue:#2563eb;
+  --gold:#f5c518;--green:#10b981;--red:#f87171;
+  --txt:#e2e8f0;--muted:#94a3b8;--border:#2a3048;
+}
+body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--txt);min-height:100vh;padding:20px;font-size:14px}
+.container{max-width:1100px;margin:0 auto}
+
+/* HEADER BAR */
+.header{display:flex;align-items:center;justify-content:between;background:var(--bg2);border:1px solid var(--border);padding:16px 20px;border-radius:12px;margin-bottom:20px;flex-wrap:wrap;gap:12px}
+.logo-area{display:flex;align-items:center;gap:10px}
+.logo-icon{font-size:24px}
+.logo-title{font-size:16px;font-weight:800;color:var(--purple)}
+.logo-sub{font-size:11px;color:var(--muted)}
+.status-pill{background:rgba(167,139,250,.12);color:var(--purple);font-size:11px;font-weight:700;padding:4px 10px;border-radius:20px;margin-left:auto}
+
+/* MAIN SPLIT GRID */
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+@media(max-width:900px){.grid{grid-template-columns:1fr}}
+
+/* MODULE CARDS */
+.card{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:20px;height:fit-content}
+.card-title{font-size:14px;font-weight:800;margin-bottom:14px;display:flex;align-items:center;gap:8px;border-bottom:1px solid var(--border);padding-bottom:8px;letter-spacing:.04em;text-transform:uppercase}
+
+/* INPUT COMPREHENSION */
+.lbl{font-size:11px;font-weight:700;color:var(--muted);letter-spacing:.05em;margin-bottom:6px;display:block}
+.inp,.sel,.txta{width:100%;background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:10px 14px;color:var(--txt);font-size:13px;outline:none;margin-bottom:14px;transition:.15s}
+.inp:focus,.sel:focus,.txta:focus{border-color:var(--purple)}
+.txta{height:100px;resize:none}
+
+/* BUTTONS */
+.btn{width:100%;padding:12px;border:none;border-radius:8px;font-weight:700;font-size:13px;display:flex;align-items:center;justify-content:center;gap:8px;cursor:pointer;transition:.15s;margin-bottom:10px}
+.btn-purple{background:var(--purple);color:#000}.btn-purple:hover{opacity:.9}
+.btn-teal{background:var(--teal);color:#000}.btn-teal:hover{opacity:.9}
+.btn-ghost{background:var(--bg3);color:var(--txt);border:1px solid var(--border)}.btn-ghost:hover{border-color:var(--purple)}
+
+/* CHANNELS & METRICS */
+.channel-box{background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:12px;margin-bottom:12px;display:flex;align-items:center;justify-content:space-between}
+.ch-info{display:flex;align-items:center;gap:10px}
+.ch-dot{width:8px;height:8px;border-radius:50%;background:var(--red)}
+.ch-dot.active{background:var(--green)}
+.ch-name{font-weight:700;font-size:13px}
+.ch-status{font-size:11px;color:var(--muted)}
+
+/* PROGRESS TRACKER */
+.prog-track{background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:12px;margin-top:12px;display:none}
+.prog-bar-container{background:var(--bg4);height:6px;border-radius:3px;overflow:hidden;margin:8px 0}
+.prog-bar{background:linear-gradient(90deg,var(--purple),var(--teal));height:100%;width:0%;transition:width .4s}
+.prog-text{font-size:11px;color:var(--muted);display:flex;justify-content:space-between}
+</style>
+</head>
+<body>
+
+<div class="container">
+
+  <div class="header">
+    <div class="logo-area">
+      <div class="logo-icon">🎬</div>
+      <div>
+        <div class="logo-title">Video Generator Studio</div>
+        <div class="logo-sub">Hub Engine v4 Module · Modular Asset Generation</div>
+      </div>
+    </div>
+    <div class="status-pill">Render Server Intermediary Connected</div>
+  </div>
+
+  <div class="grid">
+    
+    <div class="card">
+      <div class="card-title" style="color:var(--purple)">🧬 Script Engine &amp; Visual DNA</div>
+      
+      <label class="lbl">SELECT CAMPAIGN PERSONA</label>
+      <select class="sel" id="v-persona">
+        <option value="Susan">Susan — Premium Affiliate Sales</option>
+        <option value="Alisha">Alisha — Viral Tech &amp; Gadget Deals</option>
+        <option value="Lisa">Lisa — Lifestyle &amp; Creative Promotion</option>
+        <option value="BigAl">Big Al — Strategic Corporate Leadership (Grey Beard)</option>
+      </select>
+
+      <label class="lbl">VIDEO MAIN CONCEPT / TOPIC</label>
+      <input class="inp" id="v-topic" placeholder="e.g., 3 Hidden Cash Leaks safely patched in 60 seconds">
+
+      <label class="lbl">ASSET TARGET FORMAT</label>
+      <select class="sel" id="v-format">
+        <option value="shorts">YouTube Shorts / TikTok (Vertical 9:16)</option>
+        <option value="wide">Standard Full Video (Horizontal 16:9)</option>
+      </select>
+
+      <button class="btn btn-purple" onclick="generateScript()">✍ Generate Short-Form Script</button>
+      
+      <label class="lbl" style="margin-top:14px">PRODUCED AUDIO/VISUAL SCRIPT CONTENT</label>
+      <textarea class="txta" id="v-script" placeholder="AI script breakdown will display here..."></textarea>
+
+      <button class="btn btn-ghost" onclick="compileVideo()">🎛 Send Assets to Shotstack Engine</button>
+      
+      <div class="prog-track" id="render-tracker">
+        <div class="prog-text">
+          <span id="render-status">Assembling video frames...</span>
+          <span id="render-pct">0%</span>
+        </div>
+        <div class="prog-bar-container"><div class="prog-bar" id="render-bar"></div></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title" style="color:var(--teal)">🚀 YouTube Channel Authorization &amp; Deployment</div>
+      
+      <label class="lbl">ACTIVE INTEGRATION NETWORKS</label>
+      
+      <div class="channel-box">
+        <div class="ch-info">
+          <div class="ch-dot" id="ch-dot-main"></div>
+          <div>
+            <div class="ch-name" id="ch-title-main">AffiliateMediaHub Channels</div>
+            <div class="ch-status" id="ch-status-main">OAuth Tokens Not Synced</div>
+          </div>
+        </div>
+        <button class="btn btn-ghost" style="width:auto;padding:6px 12px;font-size:11px;margin:0" onclick="startXauth()">Connect Channel</button>
+      </div>
+
+      <div style="background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:14px;margin-bottom:16px">
+        <label class="lbl" style="color:var(--gold)">🔑 INTERMEDIARY SECURITY PASSTHROUGH</label>
+        <input class="inp" id="oauth-code-input" placeholder="Paste Authorization Code from callback tab..." style="margin-bottom:10px">
+        <button class="btn btn-teal" style="margin:0;padding:8px" onclick="exchangeTokens()">Complete Secure Token Exchange Handshake</button>
+      </div>
+
+      <div style="border-top:1px solid var(--border);padding-top:14px">
+        <div class="card-title" style="font-size:12px;color:var(--txt);margin-bottom:10px;border:none;padding:0">Deployment Metadata</div>
+        
+        <label class="lbl">PUBLISHING VIDEO URL (COMPLETED SHOTSTACK ASSET)</label>
+        <input class="inp" id="deploy-url" placeholder="https://cdn.shotstack.io/output/..." value="https://images.unsplash.com/video-placeholder.mp4">
+
+        <label class="lbl">YOUTUBE SEO OPTIMIZED TITLE</label>
+        <input class="inp" id="deploy-title" placeholder="Enter video container headline...">
+
+        <label class="lbl">DESCRIPTION BLOCK &amp; PROMO ROUTING LINKS</label>
+        <textarea class="txta" id="deploy-desc" placeholder="Affiliate promotion text links..."></textarea>
+
+        <button class="btn btn-purple" style="background:linear-gradient(135deg,var(--purple),var(--teal));color:#000;margin-top:10px" onclick="triggerUpload()">🚀 Launch Live Production Video Upload</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+const BACKEND_URL = 'https://hubengine-backend.onrender.com';
+const DUMMY_CLIENT = '7765421190-mockclientidapps.googleusercontent.com';
+
+function startXauth() {
+  // Directly opens your Render server's automatic redirection gate
+  window.open(`${BACKEND_URL}/youtube/auth-url-redirect?client_id=${DUMMY_CLIENT}`, '_blank');
+}
+
+function exchangeTokens() {
+  const code = document.getElementById('oauth-code-input').value.trim();
+  if(!code) return alert('Please enter the verification code first!');
+  
+  alert('Connecting to Render Backend... Swapping code for long-lived Access & Refresh structural tokens.');
+  
+  // Simulation of successful secure token response mapping
+  document.getElementById('ch-dot-main').classList.add('active');
+  document.getElementById('ch-title-main').textContent = 'AffiliateMediaHub Live Channel';
+  document.getElementById('ch-status-main').textContent = 'YouTube Token Connected & Active';
+  document.getElementById('ch-status-main').style.color = 'var(--green)';
+}
+
+function generateScript() {
+  const topic = document.getElementById('v-topic').value || 'Unlocking Passive Asset Strategies';
+  const persona = document.getElementById('v-persona').value;
+  
+  let openingLine = `[${persona} Voice Profile Activated]: Hey everyone, looking to build absolute leverage?`;
+  if(persona === 'BigAl') {
+    openingLine = `[Big Al Leadership Profile - Grey Beard Visuals]: Team, alignment dictates leverage. Let's look at the metrics.`;
+  }
+  
+  document.getElementById('v-script').value = `${openingLine}\n\nHere is the core breakdown for our campaign covering "${topic}".\n\n[Visual Clip Cut]: Transition to corresponding digital dashboard assets detailing structural execution blocks.`;
+  document.getElementById('deploy-title').value = `${topic} — High Leverage Blueprint!`;
+  document.getElementById('deploy-desc').value = `Grab the full actionable step checklist guide over at our official Hub Engine Storefront.\n\n👉 Configured via AffiliateMediaHub Automated Modules.`;
+}
+
+function compileVideo() {
+  const tracker = document.getElementById('render-tracker');
+  const bar = document.getElementById('render-bar');
+  const pct = document.getElementById('render-pct');
+  const status = document.getElementById('render-status');
+  
+  tracker.style.display = 'block';
+  let progress = 0;
+  
+  const interval = setInterval(() => {
+    progress += 20;
+    bar.style.width = progress + '%';
+    pct.textContent = progress + '%';
+    
+    if(progress === 40) status.textContent = 'Weaving audio narration paths...';
+    if(progress === 80) status.textContent = 'Polishing asset resolutions...';
+    
+    if(progress >= 100) {
+      clearInterval(interval);
+      status.textContent = 'Shotstack Render Task Complete! Assets Cached.';
+      status.style.color = 'var(--teal)';
+    }
+  }, 700);
+}
+
+function triggerUpload() {
+  const title = document.getElementById('deploy-title').value;
+  if(!title) return alert('Generate a script or enter a deployment headline first!');
+  alert(`Initiating video pipeline transmission to Render Web API...\nDeploying Video Asset: "${title}" straight to your connected YouTube Publishing feed!`);
+}
+</script>
+</body>
+</html>
