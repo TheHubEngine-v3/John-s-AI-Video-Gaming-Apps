@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Hub Engine PDF Guide Business Dashboard</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#0c0f1a;--bg2:#131726;--bg3:#1a1f30;--bg4:#1e2438;
+  --teal:#00d4aa;--gold:#f5c518;--blue:#4f8ef7;
+  --purple:#9b7fee;--green:#34d399;--red:#f87171;
+  --sw:220px;--th:52px;--rad:12px;
+  --txt:#e2e8f0;--muted:#94a3b8;--border:#2a3048;
+}
+body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--txt);min-height:100vh;font-size:14px;overflow-x:hidden}
+a{text-decoration:none;color:inherit}
+button{cursor:pointer;font-family:'Inter',sans-serif;border:none}
+input,textarea,select{font-family:'Inter',sans-serif;max-width:100%;box-sizing:border-box}
+
+/* LOGIN SCREEN */
+#login-screen{position:fixed;inset:0;background:var(--bg);display:flex;align-items:center;justify-content:center;z-index:9999}
+.login-box{background:var(--bg2);border:1px solid var(--border);border-radius:16px;padding:40px 36px;width:360px;text-align:center;box-shadow:0 24px 64px rgba(0,0,0,.5)}
+.login-lock{font-size:52px;margin-bottom:10px}
+.login-logo{font-size:22px;font-weight:800;color:var(--teal);margin-bottom:4px}
+.login-sub{color:var(--muted);font-size:12px;margin-bottom:20px}
+.login-divider{height:1px;background:var(--border);margin:16px 0}
+.login-label{text-align:left;font-size:11px;font-weight:600;color:var(--muted);letter-spacing:.06em;margin-bottom:6px}
+.login-box input{width:100%;background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:12px 16px;color:var(--txt);font-size:14px;margin-bottom:12px;outline:none;letter-spacing:.1em}
+.login-box input:focus{border-color:var(--teal)}
+.login-btn{width:100%;padding:13px;background:var(--teal);color:#000;font-weight:700;font-size:14px;border-radius:8px;display:flex;align-items:center;justify-content:center;gap:8px;transition:.15s}
+.login-btn:hover{opacity:.86}
+.login-err{color:var(--red);font-size:13px;margin-top:10px;display:none}
+
+/* MAIN APP LAYOUT */
+#app{display:none;min-height:100vh}
+#sidebar{position:fixed;top:0;left:0;width:var(--sw);height:100vh;background:var(--bg2);border-right:1px solid var(--border);display:flex;flex-direction:column;z-index:200;overflow-y:auto}
+.sb-logo{padding:16px;border-bottom:1px solid var(--border)}
+.sb-logo-text{font-size:14px;font-weight:800;color:var(--teal)}
+.sb-logo-sub{font-size:10px;color:var(--muted);margin-top:2px}
+.sb-nav{padding:10px 0;flex:1}
+.sb-section{font-size:9px;color:var(--muted);padding:10px 16px 4px;letter-spacing:.08em;text-transform:uppercase;font-weight:600}
+.ni{display:flex;align-items:center;gap:10px;padding:9px 16px;font-size:12px;color:var(--muted);cursor:pointer;border-left:3px solid transparent;transition:.15s;user-select:none}
+.ni-icon{font-size:14px;width:18px;text-align:center}
+.ni:hover{color:var(--txt);background:var(--bg3)}
+.ni.active{color:var(--teal);border-left-color:var(--teal);background:rgba(0,212,170,.07)}
+.sb-bottom{padding:14px;border-top:1px solid var(--border)}
+.sb-user{font-size:11px;color:var(--muted)}
+.sb-user strong{display:block;color:var(--txt);font-size:13px;margin-bottom:2px}
+
+#topbar{position:fixed;top:0;left:var(--sw);right:0;height:var(--th);background:var(--bg2);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:0 22px;z-index:150}
+#tbl{font-size:14px;font-weight:700;color:var(--txt)}
+.tb-right{display:flex;align-items:center;gap:10px}
+.tb-pill{background:rgba(0,212,170,.12);color:var(--teal);font-size:11px;font-weight:600;padding:4px 12px;border-radius:20px}
+#hamburger{display:none;background:none;border:none;color:var(--txt);font-size:20px;cursor:pointer;padding:4px 8px}
+
+#main{margin-left:var(--sw);margin-top:var(--th);min-height:calc(100vh - var(--th));padding:20px;box-sizing:border-box}
+.page{display:none;width:100%;box-sizing:border-box}
+.page.active{display:block}
+
+/* UTILITY CARDS & GRIDS */
+.card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--rad);padding:18px;width:100%}
+.g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px}
+.g4{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+.fsb{display:flex;align-items:center;justify-content:space-between}
+.fca{display:flex;align-items:center}
+.gap8{gap:8px}
+
+/* TYPOGRAPHY & BUTTONS */
+.pg-title{font-size:20px;font-weight:800;margin-bottom:4px}
+.pg-sub{font-size:12px;color:var(--muted);margin-bottom:18px}
+.sec-title{font-size:13px;font-weight:700;margin-bottom:12px;display:flex;align-items:center;gap:6px}
+.btn{display:inline-flex;align-items:center;gap:7px;padding:10px 16px;border-radius:8px;font-size:12px;font-weight:700;transition:.15s;border:none;cursor:pointer}
+.btn-teal{background:var(--teal);color:#000}.btn-teal:hover{opacity:.85}
+.btn-purple{background:var(--purple);color:#000}.btn-purple:hover{opacity:.85}
+.btn-blue{background:var(--blue);color:#fff}.btn-blue:hover{opacity:.85}
+.btn-ghost{background:var(--bg3);color:var(--txt);border:1px solid var(--border)}.btn-ghost:hover{border-color:var(--teal);color:var(--teal)}
+.btn-w100{width:100%;justify-content:center;margin-top:10px}
+
+.stat-box{background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:14px}
+.stat-num{font-size:24px;font-weight:800;color:var(--teal)}
+.stat-lbl{font-size:11px;color:var(--muted);margin-top:2px}
+#overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:190}
+
+@media(max-width:1024px){ .g3,.g4{grid-template-columns:1fr 1fr} }
+@media(max-width:768px){
+  #sidebar{transform:translateX(-100%);transition:transform .25s}
+  #sidebar.open{transform:translateX(0)}
+  #overlay.on{display:block}
+  #main{margin-left:0;padding:14px}
+  #topbar{left:0}
+  #hamburger{display:block}
+  .g3,.g4{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+
+<div id="login-screen">
+  <div class="login-box">
+    <div class="login-lock">🔒</div>
+    <div class="login-logo">Hub Engine v4</div>
+    <div class="login-sub">PDF Guide Command Center · John Lanter CEO</div>
+    <div class="login-divider"></div>
+    <div class="login-label">STUDIO PASSWORD</div>
+    <input id="pw-input" type="password" placeholder="Enter studio password...">
+    <button class="login-btn" onclick="chkPw()"><span>🔓</span> Enter Studio</button>
+    <div class="login-err" id="pw-err">Invalid Password</div>
+  </div>
+</div>
+
+<div id="app">
+  <div id="overlay" onclick="closeSidebar()"></div>
+  
+  <div id="sidebar">
+    <div class="sb-logo">
+      <div class="sb-logo-text">PDF Guide Business</div>
+      <div class="sb-logo-sub">AffiliateMediaHub Control Center</div>
+    </div>
+    <nav class="sb-nav">
+      <div class="sb-section">Core Command</div>
+      <div class="ni active"><span class="ni-icon">📊</span>Dashboard Overview</div>
+      <div class="sb-section">Modular Fleet Shortcuts</div>
+      <div class="ni" onclick="alert('Opening Standalone Storefront Config...')"><span class="ni-icon">🛍️</span>PDF Blueprint Store</div>
+      <div class="ni" onclick="alert('Opening Standalone Video Studio...')"><span class="ni-icon">🎬</span>Video Gen Studio</div>
+      <div class="ni" onclick="alert('Opening Leadership Module...')"><span class="ni-icon">👑</span>Corporate Leadership</div>
+    </nav>
+    <div class="sb-bottom">
+      <div class="sb-user"><strong>John Lanter</strong>CEO · AffiliateMediaHub</div>
+    </div>
+  </div>
+
+  <div id="topbar">
+    <div class="fca gap8">
+      <button id="hamburger" onclick="toggleSidebar()">☰</button>
+      <span id="tbl">Command Center Dashboard</span>
+    </div>
+    <div class="tb-right">
+      <span class="tb-pill">Modular App Architecture</span>
+    </div>
+  </div>
+
+  <div id="main">
+    <div id="pg-dashboard" class="page active">
+      <div class="fsb" style="margin-bottom: 16px;">
+        <div>
+          <div class="pg-title">PDF Business Management Hub 👋</div>
+          <div class="pg-sub">Hub Engine v4 · Managing standalone digital product assets and metrics</div>
+        </div>
+      </div>
+
+      <div class="g4" style="margin-bottom: 20px;">
+        <div class="stat-box"><div class="stat-num">24</div><div class="stat-lbl">Active PDF Blueprints</div></div>
+        <div class="stat-box"><div class="stat-num" style="color:var(--purple)">142</div><div class="stat-lbl">Total Guide Downloads</div></div>
+        <div class="stat-box"><div class="stat-num" style="color:var(--green)">$1,420</div><div class="stat-lbl">Storefront Gross Value</div></div>
+        <div class="stat-box"><div class="stat-num" style="color:var(--gold)">✅</div><div class="stat-lbl">Fleet Synced Live</div></div>
+      </div>
+
+      <div class="g3" style="margin-bottom: 20px;">
+        
+        <div class="card">
+          <div class="sec-title" style="color:var(--teal)">📋 PDF Template Manager</div>
+          <div style="font-size:12px;color:var(--muted);line-height:1.6;margin-bottom:10px;">
+            Configure your zero-fluff checklist strategies, assign prices ($9 - $29), and structure your blueprint metadata blocks.
+          </div>
+          <button class="btn btn-teal btn-w100" onclick="alert('Launching Blueprint Data Blueprint Builder...')">Manage PDF Assets →</button>
+        </div>
+
+        <div class="card">
+          <div class="sec-title" style="color:var(--purple)">🛒 Storefront Funnel Sync</div>
+          <div style="font-size:12px;color:var(--muted);line-height:1.6;margin-bottom:10px;">
+            Push live catalog modifications instantly out to your public-facing Vercel Storefront application without writing code.
+          </div>
+          <button class="btn btn-purple btn-w100" onclick="alert('Synchronizing catalog arrays with live storefront database...')">Sync Vercel Store →</button>
+        </div>
+
+        <div class="card">
+          <div class="sec-title" style="color:var(--blue)">📊 Monetization Engine</div>
+          <div style="font-size:12px;color:var(--muted);line-height:1.6;margin-bottom:10px;">
+            Audit down through your download funnels, customer traffic loops, and single-problem checkout configurations.
+          </div>
+          <button class="btn btn-blue btn-w100" onclick="alert('Extracting customer verification reports...')">View Money Metrics →</button>
+        </div>
+
+      </div>
+
+      <div class="card">
+        <div class="sec-title">🌐 App Fleet System Map (Standalone Framework)</div>
+        <div style="font-size:12px;color:var(--muted);margin-bottom:14px;">
+          Your ecosystem is now split into separate, ultra-lightweight files. No overlapping code blocks.
+        </div>
+        <div class="g3">
+          <div style="background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:12px;">
+            <div style="font-weight:700;color:var(--teal)">App 1: Leadership Module</div>
+            <div style="font-size:12px;color:var(--muted);margin-top:4px">Corporate training &amp; speaking dashboard.</div>
+          </div>
+          <div style="background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:12px;">
+            <div style="font-weight:700;color:var(--purple)">App 3: PDF Storefront</div>
+            <div style="font-size:12px;color:var(--muted);margin-top:4px">Public client gallery &amp; secure downloads.</div>
+          </div>
+          <div style="background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:12px;">
+            <div style="font-weight:700;color:var(--blue)">App 4: Video Studio</div>
+            <div style="font-size:12px;color:var(--muted);margin-top:4px">Persona engine and YouTube OAuth publisher.</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<script>
+function chkPw(){
+  const pw = document.getElementById('pw-input').value;
+  if(pw){
+    document.getElementById('login-screen').style.display = 'none';
+    document.getElementById('app').style.display = 'block';
+  } else {
+    document.getElementById('pw-err').style.display = 'block';
+  }
+}
+function toggleSidebar(){
+  document.getElementById('sidebar').classList.toggle('open');
+  document.getElementById('overlay').classList.toggle('on');
+}
+function closeSidebar(){
+  document.getElementById('sidebar').classList.remove('open');
+  document.getElementById('overlay').classList.remove('on');
+}
+</script>
+</body>
+</html>
