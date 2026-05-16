@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MWF Podcast Studio Director — Hub Engine</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#0c0f1a;--bg2:#131726;--bg3:#1a1f30;--bg4:#1e2438;
+  --teal:#00d4aa;--purple:#a78bfa;--blue:#2563eb;
+  --gold:#f5c518;--green:#10b981;--red:#f87171;
+  --txt:#e2e8f0;--muted:#94a3b8;--border:#2a3048;
+}
+body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--txt);min-height:100vh;padding:20px;font-size:14px}
+.container{max-width:1100px;margin:0 auto}
+
+/* HEADER BAR */
+.header{display:flex;align-items:center;justify-content:space-between;background:var(--bg2);border:1px solid var(--border);padding:16px 20px;border-radius:12px;margin-bottom:20px;flex-wrap:wrap;gap:12px}
+.logo-area{display:flex;align-items:center;gap:10px}
+.logo-icon{font-size:24px}
+.logo-title{font-size:16px;font-weight:800;color:var(--teal)}
+.logo-sub{font-size:11px;color:var(--muted)}
+.status-pill{background:rgba(0,212,170,.12);color:var(--teal);font-size:11px;font-weight:700;padding:4px 10px;border-radius:20px}
+
+/* MAIN SPLIT GRID */
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+@media(max-width:900px){.grid{grid-template-columns:1fr}}
+
+/* CARD PANELS */
+.card{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:20px;height:fit-content}
+.card-title{font-size:13px;font-weight:800;margin-bottom:14px;display:flex;align-items:center;gap:8px;border-bottom:1px solid var(--border);padding-bottom:8px;letter-spacing:.04em;text-transform:uppercase}
+
+/* FORM ELEMENTS */
+.lbl{font-size:11px;font-weight:700;color:var(--muted);letter-spacing:.05em;margin-bottom:6px;display:block}
+.inp,.sel,.txta{width:100%;background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:10px 14px;color:var(--txt);font-size:13px;outline:none;margin-bottom:14px;transition:.15s}
+.inp:focus,.sel:focus,.txta:focus{border-color:var(--teal)}
+.txta{height:120px;resize:none}
+
+/* BUTTONS */
+.btn{width:100%;padding:12px;border:none;border-radius:8px;font-weight:700;font-size:13px;display:flex;align-items:center;justify-content:center;gap:8px;cursor:pointer;transition:.15s;margin-bottom:10px}
+.btn-teal{background:var(--teal);color:#000}.btn-teal:hover{opacity:.9}
+.btn-ghost{background:var(--bg3);color:var(--txt);border:1px solid var(--border)}.btn-ghost:hover{border-color:var(--teal);color:var(--teal)}
+
+.copy-badge{display:none;background:rgba(167,139,250,.15);color:var(--purple);font-size:11px;padding:2px 8px;border-radius:4px;font-weight:700}
+</style>
+</head>
+<body>
+
+<div class="container">
+
+  <div class="header">
+    <div class="logo-area">
+      <div class="logo-icon">🎙️</div>
+      <div>
+        <div class="logo-title">MWF Podcast Studio Director</div>
+        <div class="logo-sub">Hub Engine Modular Content Fleet — Free Production Architecture</div>
+      </div>
+    </div>
+    <div class="status-pill">Free System Ready</div>
+  </div>
+
+  <div class="grid">
+    
+    <div class="card">
+      <div class="card-title" style="color:var(--teal)">🎭 Studio Cast Selection &amp; Concept</div>
+      
+      <label class="lbl">ACTIVE PODCAST AVATAR</label>
+      <select class="sel" id="v-avatar" onchange="updateCharacterDNA()">
+        <option value="babyboss">Baby Boss — Main Podcast Show Host</option>
+        <option value="paul">Paul — Corporate Leadership Co-Host (Aged Face, Full Grey Beard)</option>
+        <option value="john">John — Tactical Automation Co-Host</option>
+        <option value="jennifer">Jennifer — Operations Analysis Co-Host</option>
+      </select>
+
+      <label class="lbl">AVATAR VISUAL STYLE DNA (FOR LEONARDO / VIDNOZ)</label>
+      <input class="inp" id="v-dna" readonly value="Cinematic podcast studio setting, ultra-detailed micro-expression 3D animation style, expressive face, high-quality lighting.">
+
+      <label class="lbl">WHAT IS THE EPISODE TOPIC OR IDEA?</label>
+      <input class="inp" id="v-concept" placeholder="e.g., Why corporate structures fail without clean tactical automation">
+
+      <button class="btn btn-teal" onclick="generateProductionBlock()">📋 Blueprint Script &amp; Dialog Layout</button>
+    </div>
+
+    <div class="card">
+      <div class="card-title" style="color:var(--purple)">🎬 Free Production Output Assets</div>
+      
+      <div class="fsb" style="display:flex;justify-content:between;align-items:center;margin-bottom:6px">
+        <label class="lbl" style="margin:0">SPOKEN DIALOG BLOCK (FOR VIDNOZ / CAPCUT TTS)</label>
+        <span class="copy-badge" id="badge-dialog">Copied!</span>
+      </div>
+      <textarea class="txta" id="out-dialog" placeholder="Spoken audio voice tracks will generate here..." onclick="copyText('out-dialog', 'badge-dialog')"></textarea>
+
+      <div class="fsb" style="display:flex;justify-content:between;align-items:center;margin-bottom:6px">
+        <label class="lbl" style="margin:0">AVATAR VISUAL GENERATION PROMPT (FOR LEONARDO/IMAGE ENGINES)</label>
+        <span class="copy-badge" id="badge-prompt">Copied!</span>
+      </div>
+      <textarea class="txta" id="out-prompt" placeholder="Visual generation engine instructions will generate here..." style="height:100px" onclick="copyText('out-prompt', 'badge-prompt')"></textarea>
+      
+      <div style="background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:12px;margin-top:14px">
+        <div style="font-size:11px;font-weight:700;color:var(--gold);margin-bottom:4px">💡 FREE TOOL WORKFLOW REMINDER</div>
+        <div style="font-size:12px;color:var(--muted);line-height:1.5">
+          1. Click inside a box above to instantly copy the contents.<br>
+          2. Drop the visual prompt into your free image/video tool.<br>
+          3. Drop the dialog block into your free text-to-speech engine or voiceover tool inside CapCut.
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+const dnaMap = {
+  babyboss: "Hyper-realistic cute baby boss character dressed in a tiny corporate business suit, sitting behind a high-end podcast microphone, dark studio neon backdrop, 3d render animation style.",
+  paul: "Distinguished elderly gentleman executive with an aged face and a full, neat grey beard, wearing dark podcast headphones, professional production set background, hyper-detailed photorealistic look.",
+  john: "Professional modern male studio tech creator, intelligent focused look, casual streetwear blazer, large podcast microphone setup, depth of field cinematic lighting.",
+  jennifer: "Professional modern female operations director, sharp corporate attire, sitting confidently at a clean mahogany podcast desk, professional rim lighting, highly detailed look."
+};
+
+function updateCharacterDNA() {
+  const selected = document.getElementById('v-avatar').value;
+  document.getElementById('v-dna').value = dnaMap[selected];
+}
+
+function generateProductionBlock() {
+  const avatar = document.getElementById('v-avatar').value;
+  const concept = document.getElementById('v-concept').value || "Unlocking Hidden Organizational Assets";
+  
+  let transcript = "";
+  if(avatar === 'babyboss') {
+    transcript = `Look, let's break down the metrics. Everyone is out there crying about market friction, but nobody is cleaning up their automation lines. If your data structure doesn't compile while you sleep, you don't have an asset—you just have a job. Fix the workflow, dominate the segment.`;
+  } else if(avatar === 'paul') {
+    transcript = `In my years scaling corporate layouts, alignment always dictates execution speed. When we look closely at "${concept}", the breakdown isn't structural failure—it's tactical drag. True leadership means building systems that eliminate operational clutter entirely. Let's look at the baseline indicators.`;
+  } else {
+    transcript = `Here is the precise tactical breakdown for "${concept}". We aren't guessing here; we are executing systematically. Watch how these modular components connect to bypass systemic friction immediately.`;
+  }
+  
+  document.getElementById('out-dialog').value = transcript;
+  document.getElementById('out-prompt').value = dnaMap[avatar] + " High resolution, cinematic masterpiece, ready for digital production layout panels.";
+}
+
+function copyText(elementId, badgeId) {
+  const copyText = document.getElementById(elementId);
+  if(!copyText.value) return;
+  
+  copyText.select();
+  copyText.setSelectionRange(0, 99999);
+  navigator.clipboard.writeText(copyText.value);
+  
+  const badge = document.getElementById(badgeId);
+  badge.style.display = "inline-block";
+  setTimeout(() => { badge.style.display = "none"; }, 1500);
+}
+
+// Run initial visual state sync
+updateCharacterDNA();
+</script>
+</body>
+</html>
