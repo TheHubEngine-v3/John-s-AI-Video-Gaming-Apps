@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>App 4: Video Generator Studio — FreeStack Engine v4</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#0c0f1a;--bg2:#131726;--bg3:#1a1f30;--bg4:#1e2438;
+  --teal:#00d4aa;--blue:#4f8ef7;--purple:#9b7fee;
+  --green:#34d399;--txt:#e2e8f0;--muted:#94a3b8;--border:#2a3048;
+  --sw:220px;--th:52px;
+}
+body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--txt);min-height:100vh;overflow-x:hidden}
+button, a{text-decoration:none;font-family:'Inter',sans-serif}
+
+/* SIDEBAR & NAVIGATION SETUP */
+#sidebar{position:fixed;top:0;left:0;width:var(--sw);height:100vh;background:var(--bg2);border-right:1px solid var(--border);display:flex;flex-direction:column;z-index:200}
+.sb-logo{padding:16px;border-bottom:1px solid var(--border)}
+.sb-logo-text{font-size:14px;font-weight:800;color:var(--teal)}
+.sb-logo-sub{font-size:10px;color:var(--muted);margin-top:2px}
+.sb-nav{padding:10px 0;flex:1;overflow-y:auto}
+.sb-section{font-size:10px;color:var(--muted);padding:10px 16px 4px;letter-spacing:.08em;text-transform:uppercase;font-weight:700}
+.ni{display:flex;align-items:center;gap:10px;padding:10px 16px;font-size:13px;color:var(--muted);cursor:pointer;transition:.15s;border-left:3px solid transparent}
+.ni:hover{color:var(--txt);background:var(--bg3)}
+.ni.active{color:var(--teal);border-left-color:var(--teal);background:rgba(0,212,170,.06);font-weight:600}
+
+#topbar{position:fixed;top:0;left:var(--sw);right:0;height:var(--th);background:var(--bg2);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:0 20px;z-index:150}
+#tbl{font-size:14px;font-weight:700;color:var(--txt)}
+.tb-pill{background:rgba(0,212,170,.1);color:var(--teal);font-size:11px;font-weight:700;padding:4px 10px;border-radius:20px}
+
+#main{margin-left:var(--sw);margin-top:var(--th);min-height:calc(100vh - var(--th));padding:20px;box-sizing:border-box}
+
+/* STYLING BLOCK CORES */
+.card{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:22px;margin-bottom:16px}
+.grid-split{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+.label{display:block;font-size:11px;font-weight:700;color:var(--muted);letter-spacing:.06em;text-transform:uppercase;margin-bottom:6px}
+select, textarea{width:100%;background:var(--bg3);border:1px solid var(--border);border-radius:6px;padding:12px;color:var(--txt);font-family:inherit;font-size:13px;outline:none;transition:.15s}
+select:focus, textarea:focus{border-color:var(--teal)}
+.btn{background:linear-gradient(135deg,#00f2fe,#00d4aa);color:#000;border:none;padding:12px 20px;border-radius:6px;font-weight:700;font-size:13px;cursor:pointer;transition:.15s;width:100%}
+.btn:hover{opacity:.9}
+
+/* SYSTEM MAP TILES */
+.map-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:14px}
+.map-tile{background:var(--bg3);border:1px solid var(--border);border-radius:6px;padding:12px}
+.map-name{font-size:12px;font-weight:700;color:var(--teal);margin-bottom:2px}
+.map-desc{font-size:11px;color:var(--muted);line-height:1.4}
+
+@media(max-width:1024px){.map-grid{grid-template-columns:1fr 1fr}}
+@media(max-width:768px){
+  #sidebar{display:none}
+  #main,#topbar{left:0;margin-left:0}
+  .grid-split, .map-grid{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+
+  <div id="sidebar">
+    <div class="sb-logo">
+      <div class="sb-logo-text">Video Gen Studio</div>
+      <div class="sb-logo-sub">AffiliateMediaHub Control Center</div>
+    </div>
+    <nav class="sb-nav">
+      <div class="sb-section">Command</div>
+      <a class="ni" href="#" onclick="history.back(); return false;">⬅️ Return to Master Center</a>
+      
+      <div class="sb-section">Modular Fleet Shortcuts</div>
+      <div class="ni active">🎬 Video Gen Studio (App 4)</div>
+      <a class="ni" href="https://6-28-ai-training.vercel.app" target="_top">🤖 AI Skills Track (App 6)</a>
+      <a class="ni" href="https://7-84-corporate.vercel.app" target="_top">👔 Leadership Mastery (App 7)</a>
+      <a class="ni" href="https://8-spanish-learning.vercel.app" target="_top">🇪🇸 Conversational Spanish (App 8)</a>
+    </nav>
+  </div>
+
+  <div id="topbar">
+    <div id="tbl">App 4: Video Generator Studio</div>
+    <div class="tb-right"><span class="tb-pill">FreeStack Engine Active</span></div>
+  </div>
+
+  <div id="main">
+    
+    <div class="card">
+      <div style="margin-bottom:20px">
+        <h2 style="font-size:18px;font-weight:800">Automated Multi-Persona Video Compiler</h2>
+        <p style="color:var(--muted);font-size:12px">Select active audio-to-video studio script parameters below</p>
+      </div>
+
+      <div class="grid-split">
+        <div>
+          <div style="margin-bottom:14px">
+            <label class="label">Select Target Podcast Speaker Team</label>
+            <select id="speakerTeam">
+              <option value="alisha-susan">Alisha / Susan — Team Podcast</option>
+              <option value="paul-becky1">Paul / Becky (1) — Team Podcast</option>
+              <option value="lisa-becky2">Lisa / Becky (2) — Team Podcast</option>
+            </select>
+          </div>
+
+          <div style="margin-bottom:14px">
+            <label class="label">Video Resolution Track</label>
+            <select id="aspectRatio">
+              <option value="vertical">Vertical Short-Form (9:16 TikTok/YouTube Short)</option>
+              <option value="landscape">Landscape Studio View (16:9 Full Podcast)</option>
+            </select>
+          </div>
+
+          <div style="margin-bottom:14px">
+            <label class="label">Staged Prompt &amp; Script Content</label>
+            <textarea rows="4" placeholder="Paste or drag dialog strings here for cloud rendering execution..."></textarea>
+          </div>
+
+          <button class="btn" onclick="alert('Compiling podcast audio tracks and assembling frames over cloud storage nodes...')">Generate Multi-Track Studio Video →</button>
+        </div>
+
+        <div style="background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:20px;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center">
+          <span style="font-size:32px;margin-bottom:10px">🎙️</span>
+          <h4 style="font-size:14px;font-weight:700;margin-bottom:4px">Staging Pipeline Ready</h4>
+          <p style="color:var(--muted);font-size:12px;max-width:280px;line-height:1.5">Select your active speaker configuration on the left to push automated layouts straight to your rendering loop.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3 style="font-size:13px;font-weight:700;color:var(--txt)">🌐 App Fleet System Map (Standalone Framework)</h3>
+      <p style="color:var(--muted);font-size:11px;margin-top:2px">Unified parameters active. No overlapping loop dependencies across current build repos.</p>
+      
+      <div class="map-grid">
+        <div class="map-tile">
+          <div class="map-name">App 1: Master Workbench</div>
+          <div class="map-desc">Central system gateway, navigation matrix, and prompt optimizer console.</div>
+        </div>
+        <div class="map-tile">
+          <div class="map-name">App 2: PDF Business</div>
+          <div class="map-desc">Main control panel for digital download sales tracking, Gross Value metrics, and asset templates.</div>
+        </div>
+        <div class="map-tile">
+          <div class="map-name">App 4: Video Studio</div>
+          <div class="map-desc">Dynamic multi-persona video editor supporting Alisha, Susan, Paul, Lisa, and Becky podcast configurations.</div>
+        </div>
+        <div class="map-tile">
+          <div class="map-name">App 6: AI Tech Training</div>
+          <div class="map-desc">28-Day AI Learning track monitoring your skill progression curves and automated tool mastery dashboards.</div>
+        </div>
+        <div class="map-tile">
+          <div class="map-name">App 7: Leadership Mastery</div>
+          <div class="map-desc">28-Day Executive Tracker for supervisor interview presentations, body language look control, and speaking agility.</div>
+        </div>
+        <div class="map-tile">
+          <div class="map-name">App 8: Spanish Language</div>
+          <div class="map-desc">28-Day conversational language learning curriculum and interactive voice translation logs.</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+</body>
+</html>
